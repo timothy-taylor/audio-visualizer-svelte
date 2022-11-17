@@ -3,14 +3,19 @@ import file from "../assets/coyotes.wav";
 
 const context = new AudioContext;
 
+//
+// export context so we can resume() or suspend() it from our components
 export const ctx = readable(context),
   rawData = writable([]);
 
+//
+// update rawData from an audio source
 export const startFromFile = async () => {
   const res = await fetch(file),
     byteArray = await res.arrayBuffer(),
-    audioBuffer = await context.decodeAudioData(byteArray),
-    source = new AudioBufferSourceNode(context, { buffer: audioBuffer }),
+    audioBuffer = await context.decodeAudioData(byteArray);
+
+  const source = new AudioBufferSourceNode(context, { buffer: audioBuffer }),
     analyzer = new AnalyserNode(context, { fftSize: 512 });
 
   source.connect(analyzer);

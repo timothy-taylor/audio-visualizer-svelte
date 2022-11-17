@@ -5,8 +5,11 @@
   export let color, scale;
   let intensity, paths;
 
-  const arcBuilder = arc();
+  const createArc = arc();
 
+  //
+  // a reactive block that will calculate intensity and svg paths
+  // from our rawData store using the arc library from d3
   $: {
     const data = $rawData,
       total = data.reduce((acc, cur) => acc + cur, 0),
@@ -22,7 +25,7 @@
     paths = [];
     for (const d of data) {
       const angle = rangeInRadians * (d / total),
-        path = arcBuilder({
+        path = createArc({
           innerRadius: 50 - ((d + 10) / 255) * 35,
           outerRadius: 50 + ((d + 10) / 255) * 35,
           startAngle: currentAngle,
